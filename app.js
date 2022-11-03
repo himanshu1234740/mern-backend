@@ -11,9 +11,7 @@ const app = express();
 
 app.use(bodyParser.json({limit: '30mb',extended: true}))
 app.use(bodyParser.urlencoded({limit: '30mb',extended: true}))
-app.use('/upload',express.static('upload'))
-app.use('/profile',express.static('profile'))
-app.use('/frontend',express.static('frontend'))
+
 //file uploader
 
 

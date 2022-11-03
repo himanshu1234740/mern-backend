@@ -5,19 +5,17 @@ import {register,login,getUser,updateUser,userdata,profileUpdate} from '../contr
 import multer from "multer";
 import fetchuser from "../middelware/verify.js";
 const route = express.Router()
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, 'upload/')
-    },
-    filename: function (req, file, cb) {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-      cb(null, uniqueSuffix + '-' + file.originalname)
   
+const upload = multer({
+  storage: multer.diskStorage({}),
+  fileFilter: (req, file, cb) => {
+    if(!file.mimetype.match(/jpg|JPG|jpeg|png|gif$i/)){
+      cb(new Error("file not supported"),false)
+      return
     }
-  })
-  
-  const upload = multer({ storage: storage })
+    cb(null, true)
+  }
+})
 
 route.get('/',getPost)
 route.post('/api/user',upload.single('selectedFiles'),fetchuser,createUser)
@@ -29,25 +27,14 @@ route.delete('/api/delete/:id',fetchuser,delet)
 
 // user authantications
 
-const profileImage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'profile/')
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-    cb(null, uniqueSuffix + '-' + file.originalname)
 
-  }
-})
-
-const profile = multer({ storage: profileImage })
 
 route.post('/api/register',register)
 route.post('/api/login',login)
 route.get('/api/getUser',getUser)
 route.get('/api/userdata/:id',fetchuser,userdata)
 route.put('/api/updateUser/:id',fetchuser,updateUser)
-route.patch('/api/profileUpdate/:id',fetchuser,profile.single('profile'),profileUpdate)
+route.patch('/api/profileUpdate/:id',fetchuser,upload.single('profile'),profileUpdate)
 
 
 export default route 
