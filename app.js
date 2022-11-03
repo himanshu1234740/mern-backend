@@ -13,7 +13,7 @@ app.use(bodyParser.json({limit: '30mb',extended: true}))
 app.use(bodyParser.urlencoded({limit: '30mb',extended: true}))
 app.use('/upload',express.static('upload'))
 app.use('/profile',express.static('profile'))
-
+app.use('/frontend',express.static('frontend'))
 //file uploader
 
 
@@ -22,6 +22,10 @@ app.use(cors())
 
 //import router here 
 app.use('/posts',postRoutes)
+//static file on heroku
+if(process.env.NODE_ENV === 'production'){
+    app.use(express.static("frontend/build"))
+}
 
 //connect to the database
 const CONNECTION_STRING = 'mongodb+srv://himanshu:himanshukumar@cluster0.1cz1luu.mongodb.net/test';
