@@ -23,9 +23,6 @@ app.use(cors())
 //import router here 
 app.use('/posts',postRoutes)
 //static file on heroku
-if(process.env.NODE_ENV === 'production'){
-    app.use(express.static("frontend/build"))
-}
 
 //connect to the database
 const CONNECTION_STRING = 'mongodb+srv://himanshu:himanshukumar@cluster0.1cz1luu.mongodb.net/test';
